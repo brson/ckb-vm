@@ -17,7 +17,7 @@ Nervos CKB is released under the terms of the MIT license. See [COPYING](COPYING
 
 This project is still in development, it's NOT in production ready status.
 
-The `master` branch is regularly built and tested, but is not guaranteed to be completely stable.
+Development currently happens on the `develop` branch in git, and that branch is the default. It and `master` are regularly built and tested, but not guaranteed to be completely stable.
 
 The contribution workflow is described in [CONTRIBUTING.md](CONTRIBUTING.md), and security policy is described in [SECURITY.md](SECURITY.md). To propose new protocol or standard for Nervos, see [Nervos RFC](https://github.com/nervosnetwork/rfcs).
 
