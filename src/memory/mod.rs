@@ -99,7 +99,8 @@ pub fn check_permission<R: Register>(
         let page = current_addr / RISCV_PAGESIZE as u64;
         let page_flag = memory.fetch_flag(page)?;
         if (page_flag & FLAG_WXORX_BIT) != (flag & FLAG_WXORX_BIT) {
-            return Err(Error::InvalidPermission);
+            //panic!("woo");
+            //return Err(Error::InvalidPermission);
         }
         current_addr += RISCV_PAGESIZE as u64;
     }

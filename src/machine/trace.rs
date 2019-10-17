@@ -112,6 +112,11 @@ impl<'a, R: Register, M: Memory<R>, Inner: SupportMachine<REG = R, MEM = WXorXMe
                 let mut i = 0;
                 while i < TRACE_ITEM_LENGTH {
                     let instruction = decoder.decode(self.machine.memory_mut(), current_pc)?;
+                    {
+                        use crate::instructions::typed;
+                        let ii = typed::get(instruction, self);
+                        println!("in: {:016x} {:?}", instruction, ii);
+                    }
                     let end_instruction = is_basic_block_end_instruction(instruction);
                     current_pc += u64::from(instruction_length(instruction));
                     self.traces[slot].instructions[i] = instruction;
