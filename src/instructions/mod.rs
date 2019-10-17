@@ -8,6 +8,10 @@ pub mod i;
 pub mod m;
 pub mod rvc;
 
+pub mod op;
+pub mod reg;
+pub mod typed;
+
 pub use self::register::Register;
 use super::Error;
 pub use ckb_vm_definitions::instructions::{
@@ -15,6 +19,10 @@ pub use ckb_vm_definitions::instructions::{
     MINIMAL_RVC_OPCODE,
 };
 pub use execute::execute;
+
+use std::fmt::{self, Debug, Formatter};
+use self::op::Op;
+use self::reg::Reg;
 
 type RegisterIndex = usize;
 type Immediate = i32;
@@ -33,7 +41,7 @@ pub fn blank_instruction(op: InstructionOpcode) -> Instruction {
     u64::from(op as u8)
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 pub struct Rtype(pub Instruction);
 
 impl Rtype {
@@ -68,7 +76,18 @@ impl Rtype {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+impl Debug for Rtype {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        f.debug_struct("Rtype")
+            .field("op", &Op(self.op()))
+            .field("rd", &Reg(self.rd()))
+            .field("rs1", &Reg(self.rd()))
+            .field("rs2", &Reg(self.rd()))
+            .finish()
+    }
+}
+
+#[derive(Clone, Copy)]
 pub struct Itype(pub Instruction);
 
 impl Itype {
@@ -118,7 +137,18 @@ impl Itype {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+impl Debug for Itype {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        f.debug_struct("Itype")
+            .field("op", &Op(self.op()))
+            .field("rd", &Reg(self.rd()))
+            .field("rs1", &Reg(self.rs1()))
+            .field("imm", &self.immediate_s())
+            .finish()
+    }
+}
+
+#[derive(Clone, Copy)]
 pub struct Stype(pub Instruction);
 
 impl Stype {
@@ -168,7 +198,18 @@ impl Stype {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+impl Debug for Stype {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        f.debug_struct("Stype")
+            .field("op", &Op(self.op()))
+            .field("rs1", &Reg(self.rs1()))
+            .field("rs2", &Reg(self.rs2()))
+            .field("imm", &self.immediate_s())
+            .finish()
+    }
+}
+
+#[derive(Clone, Copy)]
 pub struct Utype(pub Instruction);
 
 impl Utype {
@@ -194,6 +235,16 @@ impl Utype {
 
     pub fn immediate_s(self) -> Immediate {
         ((self.0 as i64) >> 32) as Immediate
+    }
+}
+
+impl Debug for Utype {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        f.debug_struct("Utype")
+            .field("op", &Op(self.op()))
+            .field("rd", &Reg(self.rd()))
+            .field("imm", &self.immediate_s())
+            .finish()
     }
 }
 

@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate derive_more;
 
+#[macro_use]
+extern crate log;
+
 pub mod bits;
 pub mod debugger;
 pub mod decoder;

@@ -17,6 +17,7 @@ use bytes::Bytes;
 use goblin::elf::program_header::{PF_R, PF_W, PF_X, PT_LOAD};
 use goblin::elf::{Elf, Header};
 use std::fmt::{self, Display};
+use crate::instructions::typed::get as idbg;
 
 fn elf_bits(header: &Header) -> Option<u8> {
     // This is documented in ELF specification, we are exacting ELF file
@@ -418,6 +419,7 @@ impl<'a, Inner: SupportMachine> DefaultMachine<'a, Inner> {
             let memory = self.memory_mut();
             decoder.decode(memory, pc)?
         };
+        debug!("step: pc: {:08x}, {:?}", self.pc().to_u64(), idbg(instruction));
         execute(instruction, self)?;
         let cycles = self
             .instruction_cycle_func()
